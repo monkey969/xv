@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的个人空间</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+        }
+
+        body {
+            font-family: '微软雅黑', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f6fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        /* 导航样式 */
+        nav {
+            background: var(--primary-color);
+            padding: 1rem;
+            margin-bottom: 20px;
+        }
+
+        nav a {
+            color: white;
+            margin-right: 20px;
+            text-decoration: none;
+        }
+
+        /* 个人信息区 */
+        .profile {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* 内容展示区 */
+        .content-section {
+            background: white;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+
+        /* 侧边栏 */
+        .sidebar {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="#home">首页</a>
+        <a href="#about">关于我</a>
+        <a href="#contact">留言</a>
+    </nav>
+
+    <div class="container">
+        <main>
+            <!-- 个人信息 -->
+            <section class="profile" id="home">
+                <h1>欢迎来到我的空间</h1>
+                <img src="images/iamge1.jpg" alt="头像" width="100">
+                <h2>基本信息</h2>
+                <p>姓名：蕉太狼 | 年龄：20 | 职业：重庆邮电大学大二学生</p>
+                <h3>兴趣爱好</h3>
+                <ul>
+                    <li>看电影</li>
+                    <li>编程</li>
+                    <li>看动漫</li>
+                    <li>玩游戏</li>
+                </ul>
+            </section>
+
+            <!-- 每日更新 -->
+            <section class="content-section" id="updates">
+                <h2>今日更新</h2>
+                <img src="images/image2.jpg" width="500">
+                <div id="daily-content"></div>
+            </section>
+
+            <!-- 内容展示 -->
+            <section class="content-section" id="gallery">
+                <h2>作品展示</h2>
+                <div class="search-box">
+                    <input type="text" placeholder="搜索标题..." id="searchTitle">
+                    <input type="date" id="searchDate">
+                    <button onclick="searchContent()">搜索</button>
+                </div>
+                <h3>置顶作品展示</h3>
+                <p>黑神话悟空</p>
+                <img src="images/imge3.jpg" width="500">
+                <div class="media-grid" id="mediaContainer"></div>
+            </section>
+
+            <!-- 留言板 -->
+            <section class="content-section" id="contact">
+                <h2>留言板</h2>
+                <form id="messageForm">
+                    <input type="text" placeholder="姓名" required>
+                    <input type="email" placeholder="邮箱" required>
+                    <textarea placeholder="留言内容" rows="4" required></textarea>
+                    <button type="submit">提交留言</button>
+                </form>
+            </section>
+        </main>
+
+        <aside class="sidebar">
+            <!-- 广告区 -->
+            <div class="ad-section">
+                <h3>推荐内容</h3>
+                <img src="images/image4.jpeg" alt="广告" class="ad-image" width="100">
+                <video controls width="100%">
+                    <source src="videos/抖音2025527-171814.mp4" type="video/mp4">
+                </video>
+                <video controls width="100%">
+                    <source src="videos/抖音2025527-769151.mp4" type="video/mp4">
+                </video>
+            </div>
+
+            <!-- 友情链接 -->
+            <div class="links">
+                <h3>友情链接</h3>
+                <ul>
+                    <li><a href="https://www.csdn.net/">技术博客</a></li>
+                    <li><a href="https://www.cnphotos.net/">摄影社区</a></li>
+                    <li><a href="https://www.mafengwo.cn/mdd/">旅行攻略</a></li>
+                    <li><a href="https://www.bilibili.com/">视频网站</a></li>
+                    <li><a href="https://store.steampowered.com/">神秘网站</a></li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+
+<!-- 添加内容输入表单 -->
+<div class="content-section">
+    <h3>添加每日内容（管理员）</h3>
+    <form id="addDailyForm">
+        <input type="date" id="inputDate" required>
+        <input type="text" id="inputTitle" placeholder="标题" required>
+        <textarea id="inputContent" placeholder="内容" required></textarea>
+        <input type="text" id="inputImage" placeholder="图片URL">
+        <button type="submit">添加内容</button>
+    </form>
+</div>
+
+  <script>
+        // 动态生成每日内容
+        // 每日内容数据库 (示例数据)
+        const dailyContents = [
+            {
+                date: "2024-03-25",
+                title: "摄影技巧：夜景拍摄",
+                content: "今天分享如何用手机拍摄高质量夜景照片...",
+                image: "images/night-photo.jpg",
+                video: "videos/night-tips.mp4"
+            },
+            {
+                date: "2024-03-26", 
+                title: "JavaScript闭包详解",
+                content: "闭包的本质是词法作用域的延续...",
+                codeSample: "function example() { ... }"
+            }
+        ];
+        function generateDailyContent() {
+            const dailyDiv = document.getElementById('daily-content');
+            const today = new Date().toISOString().split('T')[0]; // 获取当前日期
+            
+            // 查找匹配内容
+            const matchedContent = dailyContents.find(item => item.date === today);
+            
+            // 构建HTML内容
+            let htmlContent = '';
+            if(matchedContent) {
+                htmlContent += `<h3>${matchedContent.title}</h3>`;
+                htmlContent += `<p>发布日期：${matchedContent.date}</p>`;
+                htmlContent += `<div class="content-body">${matchedContent.content}</div>`;
+                
+                // 处理多媒体内容
+                if(matchedContent.image) {
+                    htmlContent += `<img src="${matchedContent.image}" class="content-image">`;
+                }
+                if(matchedContent.video) {
+                    htmlContent += `
+                        <video controls class="content-video">
+                            <source src="${matchedContent.video}" type="video/mp4">
+                        </video>
+                    `;
+                }
+            }
+            
+            dailyDiv.innerHTML = htmlContent;
+        }
+
+        // 搜索功能
+        function searchContent() {
+            const title = document.getElementById('searchTitle').value;
+            const date = document.getElementById('searchDate').value;
+            // 这里可以添加筛选逻辑
+            console.log(`搜索条件：标题-${title}, 日期-${date}`);
+        }
+
+        // 留言表单处理
+        document.getElementById('messageForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('留言已提交！');
+            // 这里可以添加AJAX提交逻辑
+        });
+
+        // 初始化
+        window.onload = function() {
+            generateDailyContent();
+            // 可以添加更多初始化逻辑
+        }
+    </script>
+</body>
+</html>
